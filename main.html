@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Login Page</title>
+
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        background: #121212;
+        color: white;
+        height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .login-box {
+        background: #1f1f1f;
+        padding: 25px;
+        width: 300px;
+        border-radius: 10px;
+        box-shadow: 0 0 10px rgba(255,255,255,0.1);
+    }
+
+    input {
+        width: 100%;
+        padding: 10px;
+        margin: 10px 0;
+        border: none;
+        border-radius: 5px;
+    }
+
+    button {
+        width: 100%;
+        padding: 10px;
+        border: none;
+        background: #4CAF50;
+        color: white;
+        font-size: 16px;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+
+    button:hover {
+        background: #45a049;
+    }
+
+    .result {
+        margin-top: 15px;
+        text-align: center;
+    }
+</style>
+
+</head>
+<body>
+
+<div class="login-box">
+    <h3>Login</h3>
+<img src="http://localhost:3000/public/profile.png" width="150">
+
+    <input type="text" id="username" placeholder="Username">
+    <input type="password" id="password" placeholder="Password">
+
+    <button onclick="login()">Login</button>
+
+    <div id="result" class="result"></div>
+</div>
+
+<script>
+function login() {
+    const username = document.getElementById("username").value;
+    const password = document.getElementById("password").value;
+
+    fetch("http://localhost:3000/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ username, password })
+    })
+    .then(res => res.json())
+    .then(data => {
+        const resultBox = document.getElementById("result");
+
+        if (data.status === "success") {
+            resultBox.style.color = "lightgreen";
+        } else {
+            resultBox.style.color = "red";
+        }
+
+        resultBox.textContent = data.message;
+    })
+    .catch(err => {
+        document.getElementById("result").textContent = "Error: " + err;
+    });
+}
+</script>
+
+</body>
+</html>
